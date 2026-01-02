@@ -119,4 +119,4 @@ if __name__ == '__main__':
         print(f"❌ Ошибка в боте: {e}")
         import traceback
         traceback.print_exc()
-ime.sleep(60)
+time.sleep(60)

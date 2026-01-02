@@ -40,7 +40,7 @@ def get_db_connection():
         # Fallback to SQLite
         import sqlite3
         conn = sqlite3.connect('bot.db')
-    return none
+    return None
 
 # Инициализация БД
 def init_db():

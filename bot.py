@@ -14,6 +14,10 @@ try:
 except ImportError:
     psycopg2 = None
 
+print("🤖 Токен получен...")
+print("🚀 Запускаю бота...")
+
+
 # Конфигурация
 TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///bot.db')

@@ -2,11 +2,14 @@ import os
 import telebot
 from telebot import types
 import datetime
-#import psycopg2
 from urllib.parse import urlparse
 import json
 import signal
 import sys
+import sqlite3
+
+def get_db_connection():
+    return sqlite3.connect('bot.db')
 
 def signal_handler(signum, frame):
     print("\n🤖 Останавливаю бота...")

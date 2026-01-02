@@ -2,7 +2,7 @@ import os
 import telebot
 from telebot import types
 import datetime
-import psycopg2
+#import psycopg2
 from urllib.parse import urlparse
 import json
 import signal

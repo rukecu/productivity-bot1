@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: productivity-bot-web
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn web_app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: BOT_USERNAME
+        value: ProductivityTrackerBot
+      - key: DATABASE_URL
+        fromDatabase:
+          name: productivity-db
+          property: connectionString
+
+  - type: worker
+    name: productivity-bot-worker
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: productivity-db
+          property: connectionString
+
+databases:
+  - name: productivity-db
+    plan: free
+    region: oregon

@@ -417,6 +417,15 @@ def settings_button(message):
     )
 
 if __name__ == '__main__':
-    print("🤖 Productivity Bot запущен...")
-    print(f"🌐 Database: {DATABASE_URL[:20]}...")
-    bot.polling(none_stop=True)
+    import sys
+    # Если бота запускают отдельно (для тестов)
+    if len(sys.argv) > 1 and sys.argv[1] == '--bot-only':
+        print("🤖 Запускаю только бота...")
+        bot.polling(none_stop=True)
+    else:
+        # Режим для совместного запуска с веб-сервером
+        print("🤖 Бот запущен в фоновом режиме...")
+        from threading import Thread
+        bot_thread = Thread(target=bot.polling, kwargs={'none_stop': True})
+        bot_thread.daemon = True  # Поток завершится с основным процессом
+        bot_thread.start()

@@ -3,10 +3,9 @@ import telebot
 from telebot import types
 import datetime
 from urllib.parse import urlparse
-import json
-import signal
 import sys
 import sqlite3
+import time  # <-- ДОБАВИТЬ
 
 # Пытаемся импортировать psycopg2 для PostgreSQL
 try:
@@ -106,7 +105,7 @@ def init_db():
         cur.close()
         conn.close()
 
-# ... остальной код без изменений (обработчики команд) ...
+# ... ВСТАВЬТЕ СЮДА ВСЕ ВАШИ ОБРАБОТЧИКИ КОМАНД (@bot.message_handler) ...
 
 if __name__ == '__main__':
     print("🚀 Инициализирую БД...")
@@ -114,9 +113,23 @@ if __name__ == '__main__':
     print("🚀 Запускаю бота...")
     
     try:
-        bot.polling(none_stop=True, interval=0, timeout=20, skip_pending=True)
+        # Пробуем polling, если ошибка 409 — ждём и пробуем ещё
+        for attempt in range(3):
+            try:
+                bot.polling(none_stop=True, interval=1, timeout=30, skip_pending=True)
+                break
+            except Exception as e:
+                if "409" in str(e):
+                    print(f"⚠️ Конфликт (попытка {attempt+1}/3), жду 10 секунд...")
+                    time.sleep(10)
+                else:
+                    raise
     except Exception as e:
         print(f"❌ Ошибка в боте: {e}")
         import traceback
         traceback.print_exc()
-time.sleep(60)
+    
+    # Держим процесс активным
+    print("🔄 Бот работает...")
+    while True:
+        time.sleep(3600)  # Спим 1 час

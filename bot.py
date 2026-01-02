@@ -133,3 +133,28 @@ if __name__ == '__main__':
     print("🔄 Бот работает...")
     while True:
         time.sleep(3600)  # Спим 1 час
+
+from flask import Flask
+from threading import Thread
+
+# Веб-сервер для проверки здоровья
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "🤖 Bot is alive!"
+
+def run_web():
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+
+if __name__ == '__main__':
+    # Запускаем веб-сервер в отдельном потоке
+    web_thread = Thread(target=run_web)
+    web_thread.daemon = True
+    web_thread.start()
+    
+    print("🚀 Инициализирую БД...")
+    init_db()
+    print("🚀 Запускаю бота...")
+    bot.polling(none_stop=True, skip_pending=True)

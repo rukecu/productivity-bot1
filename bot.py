@@ -8,23 +8,11 @@ import signal
 import sys
 import sqlite3
 
-TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
-print(f"Токен получен: {'ЕСТЬ' if TOKEN else 'НЕТ'}")
-if TOKEN:
-    print(f"Длина токена: {len(TOKEN)}")
-
 # Пытаемся импортировать psycopg2 для PostgreSQL
 try:
     import psycopg2
 except ImportError:
     psycopg2 = None
-
-print("🤖 Токен получен...")
-print("🚀 Запускаю бота...")
-
-sys.stdout.flush()  
-
-
 
 # Конфигурация
 TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
@@ -36,8 +24,6 @@ if not TOKEN:
 
 print(f"🤖 Токен получен, длина: {len(TOKEN)} символов")
 print(f"📦 DATABASE_URL: {DATABASE_URL[:20]}...")
-
- 
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -54,18 +40,13 @@ def get_db_connection():
                 port=result.port
             )
             print("✅ Подключено к PostgreSQL")
-            
-
         else:
             # Fallback to SQLite
             conn = sqlite3.connect('bot.db', check_same_thread=False)
             print("✅ Подключено к SQLite")
- 
         return conn
     except Exception as e:
         print(f"❌ Ошибка подключения к БД: {e}")
-
-sys.stdout.flush()  
         return None
 
 # Инициализация БД
@@ -73,8 +54,6 @@ def init_db():
     conn = get_db_connection()
     if conn is None:
         print("⚠️ Не удалось подключиться к БД, пропускаем инициализацию")
-        
-sys.stdout.flush()  
         return
     
     cur = conn.cursor()
@@ -121,28 +100,22 @@ sys.stdout.flush()
         
         conn.commit()
         print("✅ Таблица создана/проверена")
-        
-
     except Exception as e:
         print(f"❌ Ошибка при создании таблицы: {e}")
     finally:
         cur.close()
         conn.close()
 
-# ... остальной код без изменений ...
+# ... остальной код без изменений (обработчики команд) ...
 
 if __name__ == '__main__':
     print("🚀 Инициализирую БД...")
-    
- 
     init_db()
     print("🚀 Запускаю бота...")
-
     
     try:
-        bot.polling(none_stop=True, interval=0, timeout=20)
+        bot.polling(none_stop=True, interval=0, timeout=20, skip_pending=True)
     except Exception as e:
         print(f"❌ Ошибка в боте: {e}")
-        
         import traceback
         traceback.print_exc()

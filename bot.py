@@ -5,6 +5,16 @@ import datetime
 import psycopg2
 from urllib.parse import urlparse
 import json
+import signal
+import sys
+
+def signal_handler(signum, frame):
+    print("\n🤖 Останавливаю бота...")
+    bot.stop_bot()
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, signal_handler)  # Для Render
+signal.signal(signal.SIGINT, signal_handler)   # Для Ctrl+C
 
 # Конфигурация
 TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')

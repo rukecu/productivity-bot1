@@ -8,6 +8,11 @@ import signal
 import sys
 import sqlite3
 
+TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+print(f"Токен получен: {'ЕСТЬ' if TOKEN else 'НЕТ'}")
+if TOKEN:
+    print(f"Длина токена: {len(TOKEN)}")
+
 # Пытаемся импортировать psycopg2 для PostgreSQL
 try:
     import psycopg2

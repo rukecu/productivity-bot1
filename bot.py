@@ -37,7 +37,7 @@ if not TOKEN:
 print(f"🤖 Токен получен, длина: {len(TOKEN)} символов")
 print(f"📦 DATABASE_URL: {DATABASE_URL[:20]}...")
 
-sys.stdout.flush()  
+ 
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -55,13 +55,12 @@ def get_db_connection():
             )
             print("✅ Подключено к PostgreSQL")
             
-sys.stdout.flush()  
+
         else:
             # Fallback to SQLite
             conn = sqlite3.connect('bot.db', check_same_thread=False)
             print("✅ Подключено к SQLite")
-            
-sys.stdout.flush()  
+ 
         return conn
     except Exception as e:
         print(f"❌ Ошибка подключения к БД: {e}")
@@ -123,7 +122,7 @@ sys.stdout.flush()
         conn.commit()
         print("✅ Таблица создана/проверена")
         
-sys.stdout.flush()  
+
     except Exception as e:
         print(f"❌ Ошибка при создании таблицы: {e}")
     finally:
@@ -135,17 +134,15 @@ sys.stdout.flush()
 if __name__ == '__main__':
     print("🚀 Инициализирую БД...")
     
-sys.stdout.flush()  
+ 
     init_db()
     print("🚀 Запускаю бота...")
 
-sys.stdout.flush()  
     
     try:
         bot.polling(none_stop=True, interval=0, timeout=20)
     except Exception as e:
         print(f"❌ Ошибка в боте: {e}")
         
-sys.stdout.flush()  
         import traceback
         traceback.print_exc()
